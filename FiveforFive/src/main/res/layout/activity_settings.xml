@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="herosauce.app1.Settings"
+    android:focusableInTouchMode="false"
+    android:background="#c9e4fb"
+    android:paddingLeft="8dp">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Alert Trigger Settings"
+        android:id="@+id/tvButtons"
+        android:padding="8dp"
+        android:layout_marginTop="16dp"
+        android:textStyle="bold"
+        android:textColor="#009989" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change the number of power button clicks needed to trigger a message. We don't recommend anything less than 3. You can also disarm the trigger here."
+        android:padding="8dp"
+        android:layout_marginRight="36dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="4dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clicks to trigger alarm:"
+            android:textStyle="bold"
+            android:layout_weight="2"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/etTriggerCount"
+            android:layout_weight="0.1"
+            android:paddingRight="20dp"
+            android:text="3"
+            android:hint="3"
+            android:inputType="number"
+            android:maxLength="1"
+            android:imeOptions="actionDone"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/ButtonRow1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="4dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvPowerButton"
+            android:text="Disarm power button trigger?"
+            android:textStyle="bold"
+            android:layout_weight="2"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/cbDisarmTrigger"
+            android:layout_weight="0.1"
+            android:paddingRight="12dp"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Default Alert Group"
+        android:id="@+id/tvGroups"
+        android:padding="8dp"
+        android:layout_marginTop="16dp"
+        android:textStyle="bold"
+        android:textColor="#009989" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select one or more groups here as a default group to alert. If nothing is selected, you will not be able to discretely trigger an alert."
+        android:padding="8dp"
+        android:layout_marginRight="36dp"/>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/settings_group_holder">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/SampleGroupRow"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="4dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvSampleGroupName"
+            android:text="Default SOS Group"
+            android:textStyle="bold"
+            android:layout_weight="2"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/cbExampleBox"
+            android:layout_weight="0.1"
+            android:paddingRight="12dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/SampleGroupRow2"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="4dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvSampleGroupName2"
+            android:text="Example Group Name 2"
+            android:textStyle="bold"
+            android:layout_weight="2"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/cbExampleBox2"
+            android:layout_weight=".1"
+            android:paddingRight="12dp"/>
+    </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select a default alert message"
+        android:id="@+id/tvMessages"
+        android:padding="8dp"
+        android:textStyle="bold"
+        android:textColor="#009989" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvMessageInstructions"
+        android:padding="8dp"
+        android:text="This will be the message sent sent to the groups above when you hold down the button combination below. Tap the message title to select a different message."
+        android:layout_marginRight="36dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/SampleMessageRow"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="20dp">
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner"
+            android:prompt="@string/spinner_prompt"
+            android:layout_marginRight="36dp"></Spinner>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvSampleMessageName"
+            android:text="Default SOS Message"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvMessageBody"
+            android:text="If I don't call/text you within 5 minutes, something is wrong - please help! (-powered by DiscreteAlert)"
+            android:layout_marginRight="36dp"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
+</ScrollView>

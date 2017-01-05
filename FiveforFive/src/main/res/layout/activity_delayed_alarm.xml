@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="herosauce.app1.Settings"
+    android:focusableInTouchMode="false"
+    android:background="#fdfae7"
+    android:paddingLeft="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Configure your Bodyguard"
+            android:id="@+id/tvDelayInsTitle"
+            android:padding="8dp"
+            android:layout_marginTop="16dp"
+            android:textStyle="bold"
+            android:textColor="#ab5300"
+            android:textSize="18dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Be proactive, and set up a delayed alert! Choose your group(s), a message, and set a fuse. If something happens and you don&apos;t disarm your phone before the timer runs out, your message will go out and let people know where you are."
+            android:padding="8dp"
+            android:layout_marginRight="36dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tell these people - "
+            android:id="@+id/tvDelayGroups"
+            android:padding="8dp"
+            android:layout_marginTop="16dp"
+            android:textStyle="bold"
+            android:textColor="#ab5300" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select one or more groups here to alert."
+            android:padding="8dp"
+            android:layout_marginRight="36dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/settings_group_holder">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/SampleGroupRow"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvSampleGroupName"
+                    android:text="Default SOS Group"
+                    android:textStyle="bold"
+                    android:layout_weight="2"/>
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/cbExampleBox"
+                    android:layout_weight="0.1"
+                    android:paddingRight="12dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/SampleGroupRow2"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvSampleGroupName2"
+                    android:text="Example Group Name 2"
+                    android:textStyle="bold"
+                    android:layout_weight="2"/>
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/cbExampleBox2"
+                    android:layout_weight=".1"
+                    android:paddingRight="12dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tell them this - "
+            android:id="@+id/tvDelayMessages"
+            android:padding="8dp"
+            android:textStyle="bold"
+            android:textColor="#ab5300" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvDelayMessageInstructions"
+            android:padding="8dp"
+            android:text="Choose the message that will get sent if you don't defuse the alarm. Tap the message title to select a different message."
+            android:layout_marginRight="36dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/sampleDelayMessageRow"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="20dp">
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner"
+                android:prompt="@string/spinner_prompt"
+                android:layout_marginRight="36dp"></Spinner>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDelaySampleMessageName"
+                android:text="Default SOS Message"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDelayMessageBody"
+                android:text="If I don't call/text you within 5 minutes, something is wrong - please help! (-powered by DiscreteAlert)"
+                android:layout_marginRight="36dp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set fuse length - "
+            android:padding="8dp"
+            android:textStyle="bold"
+            android:textColor="#AB5300" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Set a timer and click conrirm. You can always open the app and cancel the alarm before the message goes out."
+            android:layout_marginRight="36dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:id="@+id/tvTimer"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_timer"
+            android:text="light the fuse"
+            android:textAllCaps="false"
+            android:textColor="#006b60"
+            android:background="@drawable/dark_green_button_border"
+            android:layout_margin="8dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</ScrollView>
+

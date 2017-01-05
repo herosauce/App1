@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:layout_gravity="center"
+    android:background="#9c062fc4"
+    tools:context="herosauce.app1.EditMessages">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter a message title"
+            android:id="@+id/messageTitle"
+            android:inputType="textCapWords"
+            android:imeOptions="actionNext"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your message here"
+            android:id="@+id/messageBody"
+            android:inputType="textMultiLine|textCapSentences"
+            android:imeOptions="actionDone"
+            android:lines="4"
+            android:minLines="3"
+            android:maxLines="8"
+            android:scrollbars="vertical"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:style="?android:attr/buttonBarButtonStyle">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:style="?android:attr/buttonBarButtonStyle"
+            android:id="@+id/bCancel"
+            android:text="@string/button_cancel"
+            android:textAllCaps="false"
+            android:background="@drawable/delete_button_border"
+            android:textSize="22sp"
+            android:layout_margin="8dp"
+            android:textColor="#FFFB6E9D" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:style="?android:attr/buttonBarButtonStyle"
+            android:id="@+id/bSave"
+            android:text="@string/button_save"
+            android:textAllCaps="false"
+            android:background="@drawable/add_button_border"
+            android:textColor="#FFA5FFA3"
+            android:layout_margin="8dp"
+            android:textSize="22sp" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

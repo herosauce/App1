@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp"
+    tools:context="herosauce.app1.Welcome"
+    android:background="#172343">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/buttonHolder"
+        android:paddingLeft="15dp"
+        android:paddingTop="15dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/add_contact_v1"/>
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/button_manage_contacts"
+                android:textAllCaps="false"
+                android:textColor="#FFA9CEF3"
+                android:background="@drawable/button_border"
+                android:id="@+id/bContacts"
+                android:layout_gravity="center" />
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/button_manage_messages"
+            android:background="@drawable/add_button_border"
+            android:textColor="#FFA5FFA3"
+            android:textAllCaps="false"
+            android:id="@+id/bMessages"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/button_settings"
+            android:background="@drawable/yellow_button_border"
+            android:textColor="#f8ffc5"
+            android:textAllCaps="false"
+            android:id="@+id/bSettings"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/button_quick_start_guide"
+            android:background="@drawable/orange_button_border"
+            android:textColor="#ffc5a3"
+            android:textAllCaps="false"
+            android:id="@+id/bQuickStart"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:text="sound the alarm!"
+            android:textStyle="bold"
+            android:background="@drawable/delete_button_border"
+            android:textColor="#FFFB6E9D"
+            android:textAllCaps="false"
+            android:id="@+id/alarm"
+            android:layout_gravity="center_horizontal" />
+
+
+    </LinearLayout>
+</LinearLayout>
