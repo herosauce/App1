@@ -166,11 +166,31 @@
             android:textStyle="bold"
             android:textColor="#AB5300" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_timer_length"
+                android:inputType="number"
+                android:imeOptions="actionDone"
+                android:text="15"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="minutes"/>
+
+        </LinearLayout>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:text="Set a timer and click conrirm. You can always open the app and cancel the alarm before the message goes out."
+            android:text="Set a timer and click confirm. You can always open the app and cancel the alarm before the message goes out."
             android:layout_marginRight="36dp"/>
 
         <TextView

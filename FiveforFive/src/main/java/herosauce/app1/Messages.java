@@ -43,7 +43,7 @@ public class Messages extends AppCompatActivity implements DialogInterface.OnDis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messages);
-        Log.i("Messages","running");
+        Log.i("Messages", "running");
 
         //See if this is the first time opening this activity
         SharedPreferences sharedPreferences = getSharedPreferences(FIRST_START, MODE_PRIVATE);
@@ -82,6 +82,7 @@ public class Messages extends AppCompatActivity implements DialogInterface.OnDis
                 newDialog.show(manager, "fragment_edit_id");
             }
         });
+    }
 
 
     @Override

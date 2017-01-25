@@ -77,7 +77,8 @@ public class Welcome extends AppCompatActivity {
         quickStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startGuide = new Intent(getApplicationContext(), DelayedAlarm.class);
+                //Intent startGuide = new Intent(getApplicationContext(), DelayedAlarm.class);
+                Intent startGuide = new Intent(getApplicationContext(), QuickStartActivity.class);
                 startActivity(startGuide);
             }
         });

@@ -1,6 +1,7 @@
 package herosauce.app1;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.concurrent.TimeUnit;
@@ -27,6 +29,7 @@ public class DelayedAlarm extends AppCompatActivity {
     //TODO: make the timer more attractive
     Button bStartTimer, bStopTimer;
     TextView tvTimer;
+    EditText etFuseLength;
 
 
     @Override
@@ -37,33 +40,68 @@ public class DelayedAlarm extends AppCompatActivity {
         bStartTimer = (Button) findViewById(R.id.button_timer);
         tvTimer = (TextView) findViewById(R.id.tvTimer);
 
-        tvTimer.setText("00:15:00");
+        etFuseLength = (EditText) findViewById(R.id.et_timer_length);
+        int fuse = Integer.parseInt(etFuseLength.getText().toString());
 
-        final CounterClass timer = new CounterClass(900000, 1000);
-        startButtonHandler(bStartTimer, timer, tvTimer);
+        tvTimer.setText(parseTime(fuse));
+
+        CountDownTimer myTimer = new CountDownTimer(fuse*60*1000,1000){
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int minutesUntilFinished = (int) millisUntilFinished/60000;
+                int s = (int) millisUntilFinished / 1000;
+                s = s % 60;
+                String ms = String.valueOf(minutesUntilFinished) + ":" + String.valueOf(s) + " remaining";
+                tvTimer.setText(ms);
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        };
+
+        //final CounterClass timer = new CounterClass(900000, 1000);
+        startButtonHandler(bStartTimer, myTimer, tvTimer);
 
     }
 
-    public void startButtonHandler (final Button startButton, final CounterClass counter, final TextView tv){
+    private String parseTime(int fuse) {
+        //converts an integer value of minutes into HH:MM:SS format
+        int h = 0;
+        int m = fuse;
+        while (fuse>60){
+            h++;
+            m = m-60;
+        }
+        return String.valueOf(h) + ":" + String.valueOf(m) + ":00";
+    }
+
+    public void startButtonHandler (final Button startButton, final CountDownTimer counter, final TextView tv){
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 counter.start();
                 startButton.setText("disarm and reset alarm");
-                startButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.delete_button_border));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    startButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.delete_button_border));
+                }
                 startButton.setTextColor(Color.parseColor("#FFFB6E9D"));
                 disarmButtonHandler(startButton, counter, tv);
 
             }
         });
     }
-
-    public void disarmButtonHandler(final Button disarmButton, final CounterClass counter, final TextView tv){
+    //Note: updated middle param to be CountDownTimer instead of custom timer object reference
+    public void disarmButtonHandler(final Button disarmButton, final CountDownTimer counter, final TextView tv){
         disarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 counter.cancel();
-                disarmButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.dark_green_button_border));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    disarmButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.dark_green_button_border));
+                }
                 disarmButton.setTextColor(Color.parseColor("#006b60"));
                 tv.setText("00:15:00");
                 disarmButton.setText("light the fuse");
