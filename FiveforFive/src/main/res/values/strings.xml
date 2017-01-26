@@ -1,0 +1,65 @@
+<resources>
+    <string name="app_name">5 for 5</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_manage_contacts">Manage Contacts</string>
+    <string name="button_manage_contacts">manage contacts</string>
+    <string name="button_manage_messages">manage messages</string>
+    <string name="button_settings">settings</string>
+    <string name="button_quick_start_guide">quick start guide</string>
+    <string name="button_create_message">create new message</string>
+    <string name="button_save">save</string>
+    <string name="button_cancel">cancel</string>
+    <string name="title_activity_phone_book">PhoneBook</string>
+    <string name="title_activity_quick_start">QuickStart</string>
+    <string name="title_activity_quick_start_fragment">QuickStartFragment</string>
+    <string name="action_settings">Settings</string>
+    <string name="page_one_title">Welcome</string>
+    <string name="page_one_body_top">Welcome to Five for Five - and thank you for helping to
+        test this app! Over the next few screens, you\'ll see what this app is about
+        and how easy it is to get everything up and going.</string>
+    <string name="page_one_body_bottom">Swipe to continue, and hit back at any time to skip the explanation. You can always read this later.</string>
+    <string name="page_two_title">What is this about</string>
+    <string name="page_two_body_top">A survey in September 2015 (AAU)
+        found that \23 percent of female undergrads have reported experiencing sexual assault since enrolling in
+        college.\ Another survey (NIJ) found that 1 in 6  American adult women has been the victim of an attempted or
+        completed rape in her lifetime. This means that fewer than 4 out of 5 women
+        live out their lives unmolested.</string>
+    <string name="page_two_middle">Four out five isn\'t good enough. We need to push for five.</string>
+    <string name="page_two_body_bottom">This app is designed to turn your phone into a discreet trigger you can use to alert your
+        friends in seconds. Just push your power button three times and
+        you\'ve sent a message to a few close people in your life who might be able to help. Some suggestions for when you might want to use this app:
+        Before heading home at night, alert your group to help you if you don\'t check back in;
+        If you see something or someone that seems off, for whatever reason, quietly alert your friends;
+        If you get pulled over and something seems off, discretely let your friends know what\'s happening.
+        Let\'s get started!</string>
+    <string name="page_three_title">Make a Contact Group</string>
+    <string name="page_three_body_top">First, you\'ll want to set up a group of people you want to alert.
+        Your groups can include as many or as few contacts as you\'d like. Keep in mind that messages are sent
+        individually to each contact, so each person will assume you are sending them a personal text.
+        This makes it more likely for your contacts to respond and help.</string>
+    <string name="page_three_body_bottom">To get started, click Manage Contacts from the Welcome screen.
+        You\'ll have one group by default, and can add as many additional groups as you like. We\'ll talk
+        about choosing a default alert group in a few screens.</string>
+    <string name="page_four_title">Make a Message (or two)</string>
+    <string name="page_four_body_top">Next, you\'ll want to set up a message that explains what\'s going on.
+        You can make as many messages as you want, so consider creating an SOS message as well as one to
+        let everyone know you\'re OK. It\'s even faster than checking in on Facebook.</string>
+    <string name="page_four_body_bottom">To get started, click Messages from the Welcome screen.
+        You\'ll have one message by default, which you can edit or delete as you like.</string>
+    <string name="page_five_title">Set your defaults</string>
+    <string name="page_five_body_top">You can control which message gets sent to which group in the
+        Settings screen. This is where you\'ll specify how many clicks will trigger the alarm, which
+        message you want to send, and which group to notify. If you want to send a different message
+        to a different group, just click the big \"sound the alarm!\" button
+        on the home screen.</string>
+    <string name="page_five_body_bottom">Additional settings still under development:
+        Setting a time delay, so the alert message is only sent if you don\'t disarm it;
+        Including your location in the SOS message;
+        Starting audio recording when the alert is triggered;
+        Status updates to friends who also have the app via push notifications.
+        All suggestions, comments, and (constructive) criticism appreciated. Stay safe!</string>
+    <string name="spinner_prompt">Choose a default message</string>
+    <string name="title_activity_test_alarm">TestAlarm</string>
+    <string name="title_activity_delayed_alarm">DelayedAlarm</string>
+    <string name="title_activity_sound_the_alarm">SoundTheAlarm</string>
+</resources>

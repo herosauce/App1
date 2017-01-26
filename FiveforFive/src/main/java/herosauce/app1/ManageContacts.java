@@ -189,7 +189,7 @@ public class ManageContacts extends AppCompatActivity implements DialogInterface
             deleteGroupButtonHandler(deleteGroup, currentGroupName, groupContainer, allGroupHolder);
 
             //Read SP file for this group name, and iterate over that
-            //I honestly can't believe this worked! :)
+            //I honestly can't believe this worked!
             final SharedPreferences thisGroupSP = getSharedPreferences(currentGroupName, MODE_PRIVATE);
             Map<String, ?> groupContacts = thisGroupSP.getAll();
             for (final Map.Entry<String, ?> contact : groupContacts.entrySet()){

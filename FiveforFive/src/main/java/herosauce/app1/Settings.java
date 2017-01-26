@@ -32,7 +32,7 @@ public class Settings extends AppCompatActivity {
 
     //Pulling from all the Shared Preferences in this activity
     private static final String MY_MESSAGES = "MyMessagesFile";
-    private static final String ALERT_SETTINGS = "MyAlertSettings";
+    public static final String ALERT_SETTINGS = "MyAlertSettings";
     public static final String MY_GROUPS = "MyGroupsFile";
     public static final String GROUP_COUNTER = "CounterFile";
     public static final String DEFAULT_MESSAGE = "DefaultMessageFile";

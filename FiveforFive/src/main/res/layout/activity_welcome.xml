@@ -69,6 +69,7 @@
         <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:id="@+id/iv_trigger_settings"
             android:background="@drawable/ic_alert_settings"/>
 
         <LinearLayout
@@ -94,6 +95,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/tv_armed_status"
                 android:textSize="13sp"
                 android:text="Armed"
                 android:textStyle="bold"
@@ -105,6 +107,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_ask_pink"
+            android:id="@+id/ask_trigger"
             android:layout_gravity="end|center_vertical"/>
 
     </LinearLayout>
@@ -119,6 +122,7 @@
         <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:id="@+id/iv_group_settings"
             android:background="@drawable/ic_group_settings"/>
 
         <LinearLayout
@@ -156,6 +160,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_ask_purple"
+            android:id="@+id/ask_people"
             android:layout_gravity="end|center_vertical"/>
 
     </LinearLayout>
@@ -170,6 +175,7 @@
         <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:id="@+id/iv_message_settings"
             android:background="@drawable/ic_message_settings"/>
 
         <LinearLayout
@@ -207,6 +213,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_ask_indigo"
+            android:id="@+id/ask_message"
             android:layout_gravity="end|center_vertical"/>
 
     </LinearLayout>
