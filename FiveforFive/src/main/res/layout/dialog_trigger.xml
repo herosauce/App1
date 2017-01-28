@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/fragment_layout"
+    tools:context="TriggerDialog">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="end">
+
+        <EditText
+            style="@style/editTextStyle"
+            android:layout_width="80dp"
+            android:inputType="number"
+            android:textSize="32sp"
+            android:text="15"
+            android:paddingLeft="16dp"
+            android:maxLength="3"
+            android:id="@+id/et_timer_length"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="minutes"
+            android:textSize="32sp"
+            android:textColor="@color/colorPrimary"
+            android:layout_weight="0.5"
+            android:paddingLeft="16dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:style="?android:attr/buttonBarButtonStyle">
+
+        <Button
+            style="@style/button.cancel"
+            android:text="@string/button_cancel"
+            android:id="@+id/bCancel"/>
+
+        <Button
+            style="@style/button.save"
+            android:text="@string/button_save"
+            android:id="@+id/bSave"/>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

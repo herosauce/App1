@@ -1,33 +1,48 @@
 package herosauce.app1;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 import static herosauce.app1.Settings.ALERT_SETTINGS;
+import static herosauce.app1.Settings.DEFAULT_MESSAGE;
+import static herosauce.app1.Settings.FUSE_LENGTH;
 import static herosauce.app1.Settings.MY_GROUPS;
+import static herosauce.app1.Settings.MY_MESSAGES;
 import static herosauce.app1.Settings.TRIGGER_COUNTER;
 
-public class Welcome extends AppCompatActivity {
+public class Welcome extends AppCompatActivity implements DialogInterface.OnDismissListener{
 
     private static final String FIRST_START = "FirstStartSetting";
     public static final String IS_ARMED = "AppIsArmedFile";
@@ -56,6 +71,7 @@ public class Welcome extends AppCompatActivity {
         //Starting alarm trigger service explicitly
         Intent startAlarmTriggerService = new Intent(getApplicationContext(), AlarmTrigger.class);
         startService(startAlarmTriggerService);
+        populateFuse();
 
         //Setting up each icon to launch its respective management activity
         //First, the alert trigger (general settings)
@@ -94,6 +110,14 @@ public class Welcome extends AppCompatActivity {
         TextView defaultGroupName = (TextView) findViewById(R.id.tv_group_name);
         TextView defGroupMembers = (TextView) findViewById(R.id.tv_group_folks);
         updateGroupViews(defaultGroupName, defGroupMembers);
+        //And now the icon for the explanatory toast
+        ImageView askGroup = (ImageView) findViewById(R.id.ask_people);
+        askGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Manage the people you want to alert in an emergency", Toast.LENGTH_LONG).show();
+            }
+        });
 
         //Last one: message settings
         ImageView messageIcon = (ImageView) findViewById(R.id.iv_message_settings);
@@ -104,6 +128,23 @@ public class Welcome extends AppCompatActivity {
                 startActivity(startMessages);
             }
         });
+        //Prepare TextViews related to the default message
+        TextView defaultMessageTitle = (TextView) findViewById(R.id.tv_message_title);
+        TextView messageFirstLine = (TextView) findViewById(R.id.tv_message_line);
+        updateMessageViews(defaultMessageTitle, messageFirstLine);
+        //And finally, the explanatory toast
+        ImageView askMessages = (ImageView) findViewById(R.id.ask_message);
+        askMessages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Manage the message you send in an emergency", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        //Set up the delayed alert
+        TextView timerDisplayMessage = (TextView) findViewById(R.id.tv_timer_display);
+        TextView timer = (TextView) findViewById(R.id.tv_time);
+        enableTimer(timerDisplayMessage, timer);
 
         /*Button alarm = (Button) findViewById(R.id.alarm);
         alarm.setOnClickListener(new View.OnClickListener(){
@@ -121,6 +162,222 @@ public class Welcome extends AppCompatActivity {
                 blast.show(manager, "fragment_edit_id");
             }
         });*/
+    }
+
+    private void enableTimer(final TextView display, final TextView timer) {
+        //Access fuse length from a Shared Preferences file
+        final SharedPreferences fuseSP = getSharedPreferences(FUSE_LENGTH, MODE_PRIVATE);
+        final int fuseLength = fuseSP.getInt("fuse",15);
+        //Controls the countdown timer and manages the on tick and on finish events
+        timer.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                //Launch a fragment to adjust how many minutes the timer should take
+                FragmentManager manager = getFragmentManager();
+                Fragment frag = manager.findFragmentByTag("fragment_edit_id");
+                if (frag != null) {
+                    manager.beginTransaction().remove(frag).commit();
+                }
+
+                TriggerDialog dialog = new TriggerDialog();
+                dialog.show(manager, "fragment_edit_id");
+                return false;
+            }
+        });
+        //Create a Count Down Timer object using the fuse length, captured by the user
+        final CountDownTimer myTimer = new CountDownTimer(fuseLength*60*1000,1000){
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int minutesUntilFinished = (int) millisUntilFinished/60000;
+                int s = (int) millisUntilFinished / 1000;
+                s = s % 60;
+                String ms = String.valueOf(minutesUntilFinished) + ":" + String.valueOf(s);
+                timer.setText(ms);
+            }
+
+            @Override
+            public void onFinish() {
+                //This is where the message gets sent
+                fireZeMissiles();
+            }
+        };
+
+        //Normal click on the numbers should start the countdown.
+        // Click event handled in StartTimer method.
+        startTimer(display, timer, myTimer);
+    }
+
+    private void startTimer(final TextView display, final TextView timer, final CountDownTimer myTimer) {
+        //Adjust the start button - circle and textviews to reflect active status
+        timer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                display.setText("Disarm");
+                myTimer.start();
+                //Adjust circle color and add a disarm handler
+                LinearLayout circleLayout = (LinearLayout) findViewById(R.id.ll_circle);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    circleLayout.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_round_red));
+                }
+                disarmTimerHandler(display, timer, myTimer);
+            }
+        });
+
+    }
+
+    private void disarmTimerHandler(final TextView display, final TextView timer, final CountDownTimer myTimer) {
+        timer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myTimer.cancel();
+                display.setText("Start Timer");
+                //Adjust circle color and add a start handler
+                LinearLayout circleLayout = (LinearLayout) findViewById(R.id.ll_circle);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    circleLayout.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_round));
+                }
+                //Reset timer display to default fuse length
+                final SharedPreferences fuseSP = getSharedPreferences(FUSE_LENGTH, MODE_PRIVATE);
+                int fuseLength = fuseSP.getInt("fuse",15);
+                String timerText = String.valueOf(fuseLength) + ":00";
+                timer.setText(timerText);
+                startTimer(display, timer, myTimer);
+            }
+        });
+    }
+
+    public void fireZeMissiles(){
+        //Sends default SMS to groups selected in Settings file.
+        //First: set up list of groups to send to
+        ArrayList<String> groupArray = new ArrayList<>();
+
+        SharedPreferences groupSP = getSharedPreferences(ALERT_SETTINGS, MODE_PRIVATE);
+        Map<String, ?> groupMap = groupSP.getAll();
+        for (final Map.Entry<String, ?> entry : groupMap.entrySet()){
+            if (entry.getValue().equals(true)){
+                groupArray.add(entry.getKey());
+            }
+        }
+        //if there are no contacts in the group(s), cancel operation.
+        if (groupArray.isEmpty()){onDestroy();}
+
+        //Now, establish the default message to be sent
+        final SharedPreferences defaultMessageSP = getSharedPreferences(DEFAULT_MESSAGE, MODE_PRIVATE);
+        String defaultMessageTitle = "No default message detected";
+        final Map<String, ?> defaultMessageMap = defaultMessageSP.getAll();
+        for (final Map.Entry<String, ?> defaultEntry : defaultMessageMap.entrySet() ) {
+            if (defaultEntry.getValue().equals(true)) {
+                defaultMessageTitle = defaultEntry.getKey();
+            }
+        }
+        //if there isn't a default message, cancel the operation here.
+        if (defaultMessageTitle.equals("No default message detected")){onDestroy();}
+
+        SharedPreferences messagesSP = getSharedPreferences(MY_MESSAGES, MODE_PRIVATE);
+        String defaultMessage = messagesSP.getString(defaultMessageTitle, "No Message Found");
+        //String sosMessage = addGPStoSMS(defaultMessage, getLastBestLocation());
+        //Iterate over each group in groupArray; each member of the group has a number. Looks like BlastMessages.
+        for (int i=0; i<groupArray.size(); i++){
+            String currentGroupName = groupArray.get(i);
+            final SharedPreferences thisGroupSP = getSharedPreferences(currentGroupName, MODE_PRIVATE);
+            Map<String, ?> groupContacts = thisGroupSP.getAll();
+            for (final Map.Entry<String, ?> contact : groupContacts.entrySet()){
+                String number = contact.getValue().toString();
+                //MultipleSMS(number, sosMessage);
+                MultipleSMS(number, defaultMessage);
+            }
+        }
+    }
+
+    public void MultipleSMS(String phoneNumber, String message) {
+        String SENT = "SMS_SENT";
+        String DELIVERED = "SMS_DELIVERED";
+
+        PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(
+                SENT), 0);
+
+        PendingIntent deliveredPI = PendingIntent.getBroadcast(this, 0,
+                new Intent(DELIVERED), 0);
+
+        // ---when the SMS has been sent---
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context arg0, Intent arg1) {
+                switch (getResultCode()) {
+                    case Activity.RESULT_OK:
+                        Toast.makeText(arg0, "SMS sent",
+                                Toast.LENGTH_SHORT).show();
+                        Log.d("SMS STATUS", "SMS Sent.");
+                        break;
+                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                        Toast.makeText(arg0, "Generic failure",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_NO_SERVICE:
+                        Toast.makeText(arg0, "No service",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_NULL_PDU:
+                        Toast.makeText(arg0, "Null PDU",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_RADIO_OFF:
+                        Toast.makeText(arg0, "Radio off",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        }, new IntentFilter(SENT));
+
+        // ---when the SMS has been delivered---
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context arg0, Intent arg1) {
+                switch (getResultCode()) {
+                    case Activity.RESULT_OK:
+                        Toast.makeText(arg0, "SMS delivered",
+                                Toast.LENGTH_SHORT).show();
+                        Log.d("SMS Status", "SMS delivered.");
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        Toast.makeText(arg0, "SMS not delivered",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        }, new IntentFilter(DELIVERED));
+
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
+    }
+
+    private void updateMessageViews(TextView defaultMessageTitle, TextView messageFirstLine) {
+        //Retrieves the stored Default Message, if it exists, and sets the dash display
+        SharedPreferences messageSP = getSharedPreferences(MY_MESSAGES, MODE_PRIVATE);
+        //Separate SP file for the default message - true means a message is set as default
+        SharedPreferences defaultMessageSP = getSharedPreferences(DEFAULT_MESSAGE, MODE_PRIVATE);
+        String messageTitle = "No default message detected";
+        final Map<String, ?> defaultMessageMap = defaultMessageSP.getAll();
+        for (final Map.Entry<String, ?> defaultEntry : defaultMessageMap.entrySet() ) {
+            if (defaultEntry.getValue().equals(true)) {
+                messageTitle = defaultEntry.getKey();
+            }
+        }
+        //Need to see if there is a default message. If not, set TVs accordingly.
+        if (messageTitle.equals("No default message detected")){
+            defaultMessageTitle.setText(messageTitle);
+            messageFirstLine.setText("");
+        } else {
+            //Otherwise, get the first line of text and set accordingly
+            defaultMessageTitle.setText(messageTitle);
+            String fullMessage = messageSP.getString(messageTitle, "No Message Defined");
+            //Substring below creates a string starting at first character (index 0), up to either
+            // the 20th character or the last character, whichever is smaller (in case user has a very
+            // short message)
+            String firstLine = fullMessage.substring(0, Math.min(fullMessage.length(), 20));
+            messageFirstLine.setText(firstLine);
+        }
     }
 
     private void updateGroupViews(TextView defaultGroupName, TextView defGroupMembers) {
@@ -170,7 +427,8 @@ public class Welcome extends AppCompatActivity {
         //Grabs information from Settings SP files to display settings at a glance
         SharedPreferences counterSP = getSharedPreferences(TRIGGER_COUNTER, MODE_PRIVATE);
         Integer previousCounter = counterSP.getInt("default", 3);
-        clicks.setText(String.valueOf(previousCounter));
+        String numberOfClicks = "Clicks to trigger discreet alert: " + String.valueOf(previousCounter);
+        clicks.setText(numberOfClicks);
         //Now same process for armed status
         SharedPreferences armedSP = getSharedPreferences(IS_ARMED, MODE_PRIVATE);
         boolean isArmed = armedSP.getBoolean("armed", true);
@@ -182,6 +440,18 @@ public class Welcome extends AppCompatActivity {
             armedStatus.setTextColor(Color.parseColor("#C2185B"));
         }
 
+    }
+
+    @Override
+    public void onDismiss(final DialogInterface dialog){
+        populateFuse();
+    }
+
+    private void populateFuse() {
+        TextView tvFuse = (TextView) findViewById(R.id.tv_time);
+        SharedPreferences fuseSP = getSharedPreferences(FUSE_LENGTH, MODE_PRIVATE);
+        String fuse = fuseSP.getInt("fuse",15) + ":00";
+        tvFuse.setText(fuse);
     }
 
     private static final int SEND_SMS_PERMISSIONS_REQUEST = 0;
@@ -261,10 +531,14 @@ public class Welcome extends AppCompatActivity {
             //get all the permissions at once
             String[] permissions = {Manifest.permission.READ_CONTACTS, Manifest.permission.SEND_SMS, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
             int permsRequestCode = 200;
-            if (canMakeSmores()){requestPermissions(permissions, permsRequestCode);}
+            if (canMakeSmores()){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(permissions, permsRequestCode);
+                }
+            }
 
 
-            Toast.makeText(getApplicationContext(), "Welcome to 5/5!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Welcome to Ninja Buddy!", Toast.LENGTH_SHORT).show();
             sharedPreferences.edit().putBoolean("welcome_first_time", false).apply();
 
             Intent startGuide = new Intent(getApplicationContext(), QuickStartActivity.class);
@@ -285,7 +559,9 @@ public class Welcome extends AppCompatActivity {
 
         if(canMakeSmores()){
 
-            return(checkSelfPermission(permission)==PackageManager.PERMISSION_GRANTED);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return(checkSelfPermission(permission)==PackageManager.PERMISSION_GRANTED);
+            }
 
         }
 

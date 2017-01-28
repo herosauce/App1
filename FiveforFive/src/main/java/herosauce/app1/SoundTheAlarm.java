@@ -19,7 +19,7 @@ public class SoundTheAlarm extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sound_the_alarm);
 
-        Button contacts = (Button) findViewById(R.id.bContacts);
+        /*Button contacts = (Button) findViewById(R.id.bContacts);
         contacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +54,7 @@ public class SoundTheAlarm extends AppCompatActivity {
                 Intent startGuide = new Intent(getApplicationContext(), DelayedAlarm.class);
                 startActivity(startGuide);
             }
-        });
+        });*/
 
     }
 

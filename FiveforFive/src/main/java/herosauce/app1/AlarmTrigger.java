@@ -175,9 +175,7 @@ public class AlarmTrigger extends Service {
         }
     }
 
-
-
-    private void MultipleSMS(String phoneNumber, String message) {
+    public void MultipleSMS(String phoneNumber, String message) {
         String SENT = "SMS_SENT";
         String DELIVERED = "SMS_DELIVERED";
 

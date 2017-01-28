@@ -52,19 +52,18 @@ public class DelayedAlarm extends AppCompatActivity {
                 int minutesUntilFinished = (int) millisUntilFinished/60000;
                 int s = (int) millisUntilFinished / 1000;
                 s = s % 60;
-                String ms = String.valueOf(minutesUntilFinished) + ":" + String.valueOf(s) + " remaining";
+                String ms = String.valueOf(minutesUntilFinished) + ":" + String.valueOf(s);
                 tvTimer.setText(ms);
             }
 
             @Override
             public void onFinish() {
-
+                //TODO This is where the message gets sent
             }
         };
 
         //final CounterClass timer = new CounterClass(900000, 1000);
         startButtonHandler(bStartTimer, myTimer, tvTimer);
-
     }
 
     private String parseTime(int fuse) {

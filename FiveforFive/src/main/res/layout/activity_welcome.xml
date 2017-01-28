@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-    <RelativeLayout tools:context=".Welcome"
+<RelativeLayout tools:context="herosauce.app1.Welcome"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:id="@+id/activity_main"
@@ -11,7 +11,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:background="@drawable/lost_coast"
+        android:background="@drawable/lost_coast_lowres"
         android:paddingLeft="15dp"
         android:layout_height="160dp">
 
@@ -42,6 +42,7 @@
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:id="@+id/tv_timer_display"
             android:textColor="#FFFFFF"
             android:text="Start Timer"
             android:gravity="center"
@@ -51,6 +52,7 @@
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:id="@+id/tv_time"
             android:textColor="#FFFFFF"
             android:text="15:00"
             android:gravity="center"

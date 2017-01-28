@@ -31,13 +31,14 @@ import java.util.Map;
 public class Settings extends AppCompatActivity {
 
     //Pulling from all the Shared Preferences in this activity
-    private static final String MY_MESSAGES = "MyMessagesFile";
+    public static final String MY_MESSAGES = "MyMessagesFile";
     public static final String ALERT_SETTINGS = "MyAlertSettings";
     public static final String MY_GROUPS = "MyGroupsFile";
     public static final String GROUP_COUNTER = "CounterFile";
     public static final String DEFAULT_MESSAGE = "DefaultMessageFile";
     public static final String IS_ARMED = "AppIsArmedFile";
     public static final String TRIGGER_COUNTER = "TriggerCounterFile";
+    public static final String FUSE_LENGTH = "FuseLengthFile";
 
     //TODO: get programatically added checkboxes to look good
     public static final String ALARM_TRIGGERS = "MyTriggersFile";
