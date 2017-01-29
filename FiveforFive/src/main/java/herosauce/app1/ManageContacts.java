@@ -1,5 +1,6 @@
 package herosauce.app1;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -11,6 +12,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ActionMenuView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -43,16 +46,19 @@ public class ManageContacts extends AppCompatActivity implements DialogInterface
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_contacts);
-        onFirstTimeStartup();
+
         //populate screen with groups
         populateSavedGroups();
+
         //check and see if we just need to add a new group
         tryAddContactToGroup();
+
         //Manage button click for new group
         //This will start a dialogue asking for the group title, and when the
         //title dialogue is over (one EditText) the name will be saved to the Group Names SP file
-        Button new_group = (Button) findViewById(R.id.bNewGroup);
-        new_group.setOnClickListener(new View.OnClickListener() {
+        Button newGroup = (Button) findViewById(R.id.bNewGroup);
+
+        newGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //group name dialog fragment
@@ -112,7 +118,7 @@ public class ManageContacts extends AppCompatActivity implements DialogInterface
         populateSavedGroups();
     }
 
-    public void addContactButtonHandler(Button button, final String groupName){
+    public void addContactButtonHandler(ImageView button, final String groupName){
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,17 +132,12 @@ public class ManageContacts extends AppCompatActivity implements DialogInterface
     public void populateSavedGroups(){
         //Iterate over MY_GROUPS shared preferences
         //For each group, populate rows for each contact saved to that group in that group's SP file
-        //Finally, create an "Add Contact" button
+        //Include an "Add Contact" icon
         final SharedPreferences groupSP = getSharedPreferences(MY_GROUPS, MODE_PRIVATE);
-        LinearLayout.LayoutParams groupParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        groupParams.setMargins(0,0,0,40);
         allGroupHolder = (LinearLayout) findViewById(R.id.additional_group_holder);
         allGroupHolder.removeAllViews();
 
-        //Remove default group buttons/fields
-        LinearLayout activityContainer = (LinearLayout) findViewById(R.id.activity_holder);
-        LinearLayout defaultHolder = (LinearLayout) findViewById(R.id.default_group);
-        activityContainer.removeView(defaultHolder);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         Map<String, ?> allGroups = groupSP.getAll();
         for (final Map.Entry<String, ?> entry : allGroups.entrySet()) {
@@ -146,79 +147,113 @@ public class ManageContacts extends AppCompatActivity implements DialogInterface
             SharedPreferences getGroupID = getSharedPreferences(GROUP_COUNTER, MODE_PRIVATE);
             Integer groupID = getGroupID.getInt(currentGroupName, 2);
 
-            //Create titleview with group name
+            //Create layout to hold group details
             groupContainer = new LinearLayout(getApplicationContext());
-            groupContainer.setLayoutParams(groupParams);
-            groupContainer.setOrientation(LinearLayout.VERTICAL);
+            groupContainer.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            groupContainer.setOrientation(LinearLayout.HORIZONTAL);
+            groupContainer.setPadding(16,16,16,16);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                groupContainer.setElevation(4);
+            }
+            groupContainer.setBackgroundColor(Color.WHITE);
             groupContainer.setId(groupID);
 
-            TableRow.LayoutParams textParams = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 2);
-            TableRow.LayoutParams buttonParams = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 3); //height was 110, caused issues on samsung
-            TableRow.LayoutParams editButtonParams = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 3);
-            editButtonParams.setMargins(0, 0, 20, 0);
+            //Icon for adding a person - click it to add someone to this group (launches phonebook)
+            final ImageView addPersonIcon = new ImageView(getApplicationContext());
+            addPersonIcon.setLayoutParams(new ViewGroup.LayoutParams(124,124));
+            addPersonIcon.setImageResource(R.drawable.ic_message_settings);
+            addPersonIcon.setPadding(4,4,4,4);
+            groupContainer.addView(addPersonIcon);
+            addContactButtonHandler(addPersonIcon,currentGroupName);
 
-            final LinearLayout groupNameHolder = new LinearLayout(getApplicationContext());
-            groupNameHolder.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            groupNameHolder.setOrientation(LinearLayout.HORIZONTAL);
-            allGroupHolder.addView(groupContainer);
-            groupContainer.addView(groupNameHolder);
+            //Layout to hold details about the group: name and members
+            LinearLayout layoutMiddleContainer = new LinearLayout(getApplicationContext());
+            layoutMiddleContainer.setLayoutParams(new ViewGroup.LayoutParams(950, ViewGroup.LayoutParams.WRAP_CONTENT));
+            layoutMiddleContainer.setOrientation(LinearLayout.VERTICAL);
+            //Dash Text Style
+            layoutMiddleContainer.setPadding(16,16,16,16);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                layoutMiddleContainer.setElevation(4);
+            }
+            layoutMiddleContainer.setBackgroundColor(Color.WHITE);
 
-            //Add textview and buttons for each group
-            final TextView groupTitle = new TextView(getApplicationContext());
-            groupTitle.setLayoutParams(textParams);
-            groupTitle.setTextColor(Color.parseColor("#FFA9CEF3"));
-            groupTitle.setText(currentGroupName);
-            groupNameHolder.addView(groupTitle);
+            //Row layout to hold group name, edit and delete icon buttons
+            final LinearLayout rowGroupName = new LinearLayout(getApplicationContext());
+            rowGroupName.setLayoutParams(new ViewGroup.LayoutParams(650, ViewGroup.LayoutParams.WRAP_CONTENT));
+            rowGroupName.setOrientation(LinearLayout.HORIZONTAL);
+            //Dash Text Style
+            rowGroupName.setPadding(8,8,8,8);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                rowGroupName.setElevation(4);
+            }
+            rowGroupName.setBackgroundColor(Color.WHITE);
+
+            //Textview: group name
+            final TextView groupName = new TextView(getApplicationContext());
+            groupName.setLayoutParams(layoutParams);
+            groupName.setTextSize(16);
+            groupName.setText(currentGroupName);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                groupName.setTextColor(getColor(R.color.colorPrimary));
+            }
+            rowGroupName.addView(groupName);
 
             final Button editGroupName = new Button(getApplicationContext());
-            editGroupName.setText("edit");
-            editGroupName.setAllCaps(false);
-            editGroupName.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.button_border));
-            editGroupName.setTextColor(Color.parseColor("#FFA9CEF3"));
-            editGroupName.setLayoutParams(editButtonParams);
-            groupNameHolder.addView(editGroupName);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                editGroupName.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_edit));
+            }
+            editGroupName.setLayoutParams(new ViewGroup.LayoutParams(96,96));
+            rowGroupName.addView(editGroupName);
             editGroupButtonHandler(editGroupName, currentGroupName);
 
             final Button deleteGroup = new Button(getApplicationContext());
-            deleteGroup.setText("delete");
-            deleteGroup.setAllCaps(false);
-            deleteGroup.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.delete_button_border));
-            deleteGroup.setTextColor(Color.parseColor("#FFFB6E9D"));
-            deleteGroup.setLayoutParams(buttonParams);
-            groupNameHolder.addView(deleteGroup);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                deleteGroup.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_delete));
+            }
+            deleteGroup.setLayoutParams(new ViewGroup.LayoutParams(96,96));
+            rowGroupName.addView(deleteGroup);
             deleteGroupButtonHandler(deleteGroup, currentGroupName, groupContainer, allGroupHolder);
+
+            //Add the row to the middle container
+            layoutMiddleContainer.addView(rowGroupName);
 
             //Read SP file for this group name, and iterate over that
             //I honestly can't believe this worked!
             final SharedPreferences thisGroupSP = getSharedPreferences(currentGroupName, MODE_PRIVATE);
             Map<String, ?> groupContacts = thisGroupSP.getAll();
             for (final Map.Entry<String, ?> contact : groupContacts.entrySet()){
-                //create layout for contact row
-                LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                rowParams.setMargins(0,10,0,0);
-                final LinearLayout rowHolder = new LinearLayout(getApplicationContext());
-                rowHolder.setLayoutParams(rowParams);
-                rowHolder.setOrientation(LinearLayout.HORIZONTAL);
-                rowHolder.setPadding(8, 8, 8, 8);
-                groupContainer.addView(rowHolder);
+                //Layout to hold row for each member: name, number, delete icon
+                final LinearLayout rowMemberInfo = new LinearLayout(getApplicationContext());
+                rowMemberInfo.setLayoutParams(new ViewGroup.LayoutParams(650, ViewGroup.LayoutParams.WRAP_CONTENT));
+                rowMemberInfo.setOrientation(LinearLayout.HORIZONTAL);
+                //Dash Text Style
+                rowMemberInfo.setPadding(8,8,8,8);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    rowMemberInfo.setElevation(4);
+                }
+                rowMemberInfo.setBackgroundColor(Color.WHITE);
 
                 final TextView contactName = new TextView(getApplicationContext());
-                contactName.setTextColor(Color.WHITE);
+                contactName.setTextColor(Color.BLACK);
                 contactName.setTypeface(Typeface.DEFAULT_BOLD);
                 contactName.setText(contact.getKey());
-                contactName.setLayoutParams(textParams);
+                contactName.setTextSize(13);
+                contactName.setLayoutParams(layoutParams);
                 contactName.setId(0);
+                rowMemberInfo.addView(contactName);
 
                 final TextView contactNumber = new TextView(getApplicationContext());
-                contactNumber.setTextColor(Color.WHITE);
+                contactNumber.setTextColor(Color.BLACK);
                 contactNumber.setText(contact.getValue().toString());
-                contactNumber.setLayoutParams(textParams);
+                contactNumber.setLayoutParams(layoutParams);
+                contactNumber.setTextSize(13);
+                rowMemberInfo.addView(contactNumber);
 
                 final Button deleteContact = new Button(getApplicationContext());
-                deleteContact.setText("X");
-                deleteContact.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.delete_button_border));
-                deleteContact.setTextColor(Color.parseColor("#FFFB6E9D"));
-                deleteContact.setLayoutParams(buttonParams);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    deleteContact.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_delete));
+                }
+                deleteContact.setLayoutParams(new ViewGroup.LayoutParams(64,64));
 
                 deleteContact.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -226,20 +261,24 @@ public class ManageContacts extends AppCompatActivity implements DialogInterface
                         thisGroupSP.edit().remove(contact.getKey()).apply();
 
                         Toast.makeText(getApplicationContext(), "Deleted from group " + currentGroupName, Toast.LENGTH_SHORT).show();
-                        rowHolder.removeAllViews();
-                        groupContainer.removeView(rowHolder);
+                        rowMemberInfo.removeAllViews();
+                        groupContainer.removeView(rowMemberInfo);
                     }
 
                 });
-
-                rowHolder.addView(contactName);
-                rowHolder.addView(contactNumber);
-                rowHolder.addView(deleteContact);
+                rowMemberInfo.addView(deleteContact);
+                //End of cycle through a single member - add row to container, plus a spacer view
+                layoutMiddleContainer.addView(rowMemberInfo);
+                View spacer = new View(getApplicationContext());
+                spacer.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,20));
+                layoutMiddleContainer.addView(spacer);
             }
+            groupContainer.addView(layoutMiddleContainer);
+            allGroupHolder.addView(groupContainer);
             //After adding all rows, but before moving onto next group, need to add
             // "add contact" button and handler
 
-            //So, button first:
+            /*//So, button first:
             final Button addContactButton = new Button(getApplicationContext());
             addContactButton.setText("add contact");
             addContactButton.setAllCaps(false);
@@ -250,7 +289,7 @@ public class ManageContacts extends AppCompatActivity implements DialogInterface
             addContactButton.setLayoutParams(addButtonParams);
             groupContainer.addView(addContactButton);
             //And now call the handler:
-            addContactButtonHandler(addContactButton, currentGroupName);
+            addContactButtonHandler(addContactButton, currentGroupName);*/
         }
     }
 
@@ -275,19 +314,23 @@ public class ManageContacts extends AppCompatActivity implements DialogInterface
     private static final int READ_CONTACTS_PERMISSIONS_REQUEST = 1;
     public void getPermissionToReadUserContacts() {
 
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // The permission is NOT already granted.
             // Check if the user has been asked about this permission already and denied
             // it. If so, we want to give more explanation about why the permission is needed.
-            if (shouldShowRequestPermissionRationale(
-                    android.Manifest.permission.READ_CONTACTS)) {
-                // Show our own UI to explain to the user why we need to read the contacts
-                // before actually requesting the permission and showing the default UI
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (shouldShowRequestPermissionRationale(
+                        Manifest.permission.READ_CONTACTS)) {
+                    // Show our own UI to explain to the user why we need to read the contacts
+                    // before actually requesting the permission and showing the default UI
+                }
             }
-            requestPermissions(new String[]{android.Manifest.permission.READ_CONTACTS},
-                    READ_CONTACTS_PERMISSIONS_REQUEST);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},
+                        READ_CONTACTS_PERMISSIONS_REQUEST);
+            }
         }
     }
 
@@ -316,6 +359,7 @@ public class ManageContacts extends AppCompatActivity implements DialogInterface
         finish();
     }
 
+    /*//Not sure this adds any value
     public void onFirstTimeStartup(){
         //first, evaluate whether it's really the first time
         SharedPreferences sharedPreferences = getSharedPreferences(FIRST_START, MODE_PRIVATE);
@@ -370,7 +414,7 @@ public class ManageContacts extends AppCompatActivity implements DialogInterface
                 }
             });
         }
-    }
+    }*/
 }
 
 

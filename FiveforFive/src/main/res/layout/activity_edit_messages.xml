@@ -2,24 +2,50 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/fragment_layout"
-    tools:context="herosauce.app1.EditMessages">
+    tools:context="herosauce.app1.EditMessages"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
+        android:textSize="22sp"
+        android:text="Message Title"/>
 
         <EditText
             style="@style/editTextStyle.title"
-            android:hint="Enter a message title"
+            android:text="Default Message"
             android:id="@+id/messageTitle"
-            android:imeOptions="actionNext"/>
+            android:background="#FFFFFF"
+            android:imeOptions="actionNext"
+            android:padding="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
+        android:textSize="22sp"
+        android:text="SOS message" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:background="#FFFFFF"
+        android:text="This message gets sent via sms to the people in your default group, along with your gps coordinates."/>
 
         <EditText
             style="@style/editTextStyle"
-            android:hint="Enter your message here"
+            android:hint="I might need help - can you call? (sent by NinjaBodyguard)"
+            android:padding="16dp"
             android:id="@+id/messageBody"
             android:inputType="textMultiLine|textCapSentences"
             android:imeOptions="actionDone"
             android:lines="4"
             android:minLines="3"
             android:maxLines="8"
-            android:scrollbars="vertical"/>
+            android:scrollbars="vertical"
+            android:background="#FFFFFF"/>
 
     <LinearLayout
         android:layout_width="match_parent"

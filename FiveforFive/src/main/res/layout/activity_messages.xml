@@ -10,8 +10,6 @@
     android:background="@color/colorBackgroundLight"
     tools:context="herosauce.app1.Messages">
 
-
-
     <LinearLayout
         android:id="@+id/msgsContainer"
         android:orientation="vertical"
@@ -20,13 +18,11 @@
 
         <Button
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            style="@style/button"
+            android:background="@color/colorAccent"
+            android:layout_marginBottom="16dp"
             android:text="@string/button_create_message"
-            android:background="@drawable/add_button_border"
-            android:textColor="#FFA5FFA3"
-            android:textAllCaps="false"
-            android:id="@+id/bNewMessage"
-            android:padding="16dp" />
+            android:id="@+id/bNewMessage" />
 
     <LinearLayout
         android:id="@+id/msgs"

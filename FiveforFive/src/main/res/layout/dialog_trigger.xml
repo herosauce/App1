@@ -4,17 +4,33 @@
     style="@style/fragment_layout"
     tools:context="TriggerDialog">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
+        android:textSize="22sp"
+        android:paddingLeft="16dp"
+        android:text="Fuse Delay" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:paddingLeft="16dp"
+        android:text="Set the length of time before the default message you chose gets sent to the people in your SOS group."/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_gravity="end">
+        android:background="#FFFFFF"
+        android:layout_gravity="center">
 
         <EditText
             style="@style/editTextStyle"
             android:layout_width="80dp"
             android:inputType="number"
-            android:textSize="32sp"
+            android:textSize="22sp"
             android:text="15"
             android:paddingLeft="16dp"
             android:maxLength="3"
@@ -24,8 +40,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="minutes"
-            android:textSize="32sp"
-            android:textColor="@color/colorPrimary"
+            android:textSize="22sp"
+            android:textColor="#000000"
             android:layout_weight="0.5"
             android:paddingLeft="16dp"/>
 

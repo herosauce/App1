@@ -8,90 +8,30 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="herosauce.app1.ManageContacts"
-    android:background="#172343">
+    android:background="@color/colorBackgroundLight"
+    android:id="@+id/scrollView">
 
     <LinearLayout
-        android:id="@+id/activity_holder"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <Button
+            android:layout_width="fill_parent"
+            style="@style/button"
+            android:background="@color/colorAccent"
+            android:layout_marginBottom="16dp"
+            android:text="create new contact group"
+            android:id="@+id/bNewGroup"
+            />
+
         <LinearLayout
-            android:id="@+id/default_group"
+            android:id="@+id/additional_group_holder"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/title_row_holder"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/default_group_name"
-                    android:text="Default SOS Group"
-                    android:layout_marginBottom="10dp"
-                    android:textColor="#FFA9CEF3"
-                    android:textStyle="bold"
-                    android:layout_weight="2"/>
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:text="edit"
-                    android:textColor="#FFA9CEF3"
-                    android:layout_weight="3"
-                    android:textAllCaps="false"
-                    android:background="@drawable/button_border"
-                    android:layout_marginRight="8dp"
-                    android:id="@+id/editDefault"/>
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:text="delete"
-                    android:textColor="#FFFB6E9D"
-                    android:layout_weight="3"
-                    android:textAllCaps="false"
-                    android:background="@drawable/delete_button_border"
-                    android:id="@+id/deleteDefault"/>
-
-            </LinearLayout>
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:id="@+id/add_contact"
-                android:textColor="#FFA5FFA3"
-                android:background="@drawable/add_button_border"
-                android:text="add someone to this group"
-                android:textAllCaps="false"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"/>
-
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/additional_group_holder">
-
-        </LinearLayout>
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="36dp"
-            android:layout_marginTop="10dp"
-            android:text="create new contact group"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:background="@drawable/white_button_border"
-            android:id="@+id/bNewGroup"
-            android:padding="4dp" />
 
     </LinearLayout>
 </ScrollView>
